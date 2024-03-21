@@ -46,45 +46,27 @@ void loop()
   if (WiFi.status()  ==  WL_CONNECTED)
   {
         
-    //  connect with server on that particular API
-    
+    WiFiClient client;
 
+    HTTPClient http;
 
-    //  type of data to be shared : JSON
-    
-    
+    http.begin(server_name);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST({",\"temperature\" : " + String(bmp.readTemperature()) });
+    Serial.println(httpResponseCode);
+    Serial.print("http response code");
+    http.end();
 
-    //  Write the data to be sent [ JSON format ]
-    //  Example -->  String info = "{\"key_name\" : " + value in string format + "}";
-    
-
-    //  hit the POST request
-    
-
-    //  check for response
-    //  if response code > 0 : get the response message body
-
-
-
-    
-
-    //  if response code < 0, error occured
-
-    
-
-    //  end the connection with server to free up the resources
-    
-    
+    Serial.print("Temperature = ");
+    Serial.print(bmp.readTemperature());
+    Serial.println(" *C");
   }
-
-  //  if wifi not connected
+  
   else
   {
     Serial.print("Not connected with : ");
     Serial.println(ssid);
   }
-
-
   //  wait for 1 seconds before hittng a POST request again
   delay(1000);
 
